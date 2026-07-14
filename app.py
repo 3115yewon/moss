@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 
 st.set_page_config(
     page_title="이끼 공기 정화 실험",
-    page_icon="🌿",
+    page_icon="🥦",
     layout="wide"
 )
 
@@ -16,46 +16,21 @@ minutes = [0, 10, 20, 30, 40]
 chart_df = pd.DataFrame({
     "측정 차수": labels,
     "시간(분)": minutes,
-    "대조군": control,
-    "실험군": moss,
+    "대조군(ppm)": control,
+    "실험군(ppm)": moss,
 })
+chart_df["차이(ppm)"] = chart_df["대조군(ppm)"] - chart_df["실험군(ppm)"]
 
-st.title("🌿 이끼 공기 정화 실험 결과")
-st.dataframe(chart_df, use_container_width=True, hide_index=True)
-line_fig = go.Figure()
+control_drop = control[0] - control[-1]
+moss_change = moss[0] - moss[-1]
+first_gap = control[0] - moss[0]
 
-line_fig.add_trace(
-    go.Scatter(
-        x=labels,
-        y=control,
-        mode="lines+markers",
-        name="대조군",
-        line=dict(color="#c05050", width=4),
-        marker=dict(size=10)
-    )
-)
+change_labels = ["1→2차", "2→3차", "3→4차", "4→5차"]
+control_change = [control[i] - control[i - 1] for i in range(1, len(control))]
+moss_change_list = [moss[i] - moss[i - 1] for i in range(1, len(moss))]
 
-line_fig.add_trace(
-    go.Scatter(
-        x=labels,
-        y=moss,
-        mode="lines+markers",
-        name="실험군",
-        line=dict(color="#2f6f52", width=4),
-        marker=dict(size=10)
-    )
-)
-
-line_fig.update_layout(
-    title="시간에 따른 CO₂ 농도 변화",
-    xaxis_title="측정 차수",
-    yaxis_title="CO₂ 농도 (ppm)",
-    height=500,
-    template="plotly_white"
-)
-
-st.plotly_chart(line_fig, use_container_width=True)
-st.success(
-    "핵심: 실험군은 일부 측정에서 대조군보다 약간 높게 보이기도 했지만, "
-    "전체적으로는 CO₂ 농도가 400대 진입한 것은 실험군이 더 빨랐습니다. "
-)
+st.markdown(
+    """
+    <style>
+    .main {
+        background: linear-gradient(180deg, 
