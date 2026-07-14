@@ -89,14 +89,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 핵심 수치
-metric1, metric2, metric3 = st.columns(3)
-metric1.metric("대조군 총 감소 폭", f"{control_drop:,} ppm")
-metric2.metric("실험군 총 변화량", f"{moss_total_change:,} ppm")
-metric3.metric("1차 측정 차이", f"{first_gap:,} ppm")
-
 st.markdown("## 그래프")
-st.caption("발표에서는 일부 순간적인 역전보다 전체 감소 흐름과 안정화 차이를 중심으로 설명하면 좋습니다.")
 
 # 1. 메인 선 그래프
 line_fig = go.Figure()
@@ -139,56 +132,20 @@ line_fig.update_yaxes(title="CO₂ 농도 (ppm)", rangemode="tozero")
 
 st.plotly_chart(line_fig, use_container_width=True)
 
-# 2. 변화량 그래프 + 해석 박스
-bar_fig = go.Figure()
-
-bar_fig.add_trace(go.Bar(
-    x=change_labels,
-    y=control_change,
-    name="대조군 변화량",
-    marker_color="#e1a0a0",
-    hovertemplate="대조군 %{x}<br>%{y} ppm<extra></extra>"
-))
-
-bar_fig.add_trace(go.Bar(
-    x=change_labels,
-    y=moss_change,
-    name="실험군 변화량",
-    marker_color="#99c8a8",
-    hovertemplate="실험군 %{x}<br>%{y} ppm<extra></extra>"
-))
-
-bar_fig.update_layout(
-    title="이전 측정 대비 변화량",
-    barmode="group",
-    height=420,
-    template="plotly_white",
-    margin=dict(l=20, r=20, t=70, b=20)
-)
-bar_fig.update_xaxes(title="측정 구간")
-bar_fig.update_yaxes(title="변화량 (ppm)", zeroline=True)
-
-graph_col1, graph_col2 = st.columns([1.2, 0.8])
-
-with graph_col1:
-    st.plotly_chart(bar_fig, use_container_width=True)
-
-with graph_col2:
-    st.markdown("""
-    <div class="message-box">
-        <h3>그래프 해석 포인트</h3>
-        <p>
-        실험군이 일부 측정에서 대조군보다 조금 높게 보이는 구간은 있습니다.
-        하지만 핵심은 <b>처음 CO₂가 얼마나 크게 치솟았는지</b>와
-        <b>어느 집단이 더 안정적으로 유지되었는지</b>입니다.
-        </p>
-        <ul>
-            <li>대조군: 4511ppm에서 시작 후 급격히 감소</li>
-            <li>실험군: 411ppm에서 시작 후 400ppm대 유지</li>
-            <li>핵심: 실험군은 처음부터 안정 상태에 가까움</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="message-box">
+     <h3>그래프 해석 포인트</h3>
+    <p>
+    실험군이 일부 측정에서 대조군보다 조금 높게 보이는 구간은 있습니다.
+    하지만 핵심은 <b>처음 CO₂가 얼마나 크게 치솟았는지</b>와
+    <b>어느 집단이 더 안정적으로 유지되었는지</b>입니다.
+    </p>
+    <ul>
+        <li>대조군: 4511ppm에서 시작 후 급격히 감소</li>
+        <li>실험군: 411ppm에서 시작 후 400ppm대 유지</li>
+        <li>핵심: 실험군은 처음부터 안정 상태에 가까움</li>
+    </ul>
+</div>
+""", unsafe_allow_html=True)
 
 # 실험 조건
 st.markdown("## 실험 조건")
