@@ -28,11 +28,6 @@ control_drop = control[0] - control[-1]
 moss_total_change = moss[0] - moss[-1]
 first_gap = control[0] - moss[0]
 
-# 구간별 변화량
-change_labels = ["1→2차", "2→3차", "3→4차", "4→5차"]
-control_change = [control[i] - control[i - 1] for i in range(1, len(control))]
-moss_change = [moss[i] - moss[i - 1] for i in range(1, len(moss))]
-
 # 스타일
 st.markdown("""
 <style>
@@ -89,9 +84,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# 그래프
 st.markdown("## 그래프")
 
-# 1. 메인 선 그래프
 line_fig = go.Figure()
 
 line_fig.add_trace(go.Scatter(
@@ -132,17 +127,18 @@ line_fig.update_yaxes(title="CO₂ 농도 (ppm)", rangemode="tozero")
 
 st.plotly_chart(line_fig, use_container_width=True)
 
+# 그래프 해석 박스
+st.markdown("""
 <div class="message-box">
-     <h3>그래프 해석 포인트</h3>
+    <h3>그래프 해석 포인트</h3>
     <p>
-    실험군이 일부 측정에서 대조군보다 조금 높게 보이는 구간은 있습니다.
-    하지만 핵심은 <b>처음 CO₂가 얼마나 크게 치솟았는지</b>와
-    <b>어느 집단이 더 안정적으로 유지되었는지</b>입니다.
+    실험군이 일부 측정에서 대조군보다 조금 높게 보이는 구간이 있습니다.
+    하지만 <b>대기 평균 CO₂ 농도가 434ppm이라는 점에서 실험군의 정화가 제대로 이루어졌음을 확인할 수 있습니다.
     </p>
     <ul>
         <li>대조군: 4511ppm에서 시작 후 급격히 감소</li>
         <li>실험군: 411ppm에서 시작 후 400ppm대 유지</li>
-        <li>핵심: 실험군은 처음부터 안정 상태에 가까움</li>
+        <li>핵심: 실험군은 첫 측정부터 안정 상태</li>
     </ul>
 </div>
 """, unsafe_allow_html=True)
@@ -157,10 +153,6 @@ info4.info("비커 상단 파라필름 밀폐")
 
 # 표
 st.markdown("## 측정 데이터")
-st.markdown(
-    '<div class="small-note">표는 발표 흐름을 방해하지 않도록 폭을 줄여 아래에 배치했습니다.</div>',
-    unsafe_allow_html=True
-)
 
 left_space, table_col, right_space = st.columns([1.2, 2.2, 1.2])
 
@@ -175,5 +167,5 @@ with table_col:
 # 결론 문장
 st.success(
     "발표 핵심 문장: 실험군은 일부 시점에서 대조군보다 수치가 약간 높아 보이기도 했지만, "
-    "전체적으로는 CO₂ 농도가 크게 치솟지 않았고 안정적으로 유지되었습니다."
+    "전체적으로는 CO₂ 농도가 400ppm대로 유지되었습니다."
 )
